@@ -12,8 +12,10 @@ class ArticleDetailsScreen extends StatefulWidget {
   State<ArticleDetailsScreen> createState() => _ArticleDetailsScreenState();
 }
 
-
 class _ArticleDetailsScreenState extends State<ArticleDetailsScreen> {
+  List<Article> _allArticles = [];
+  List<Article> _filteredArticles = [];
+
   final formKey = GlobalKey<FormState>();
   bool isSaving = false;
   bool isActive = true;  
@@ -85,7 +87,6 @@ class _ArticleDetailsScreenState extends State<ArticleDetailsScreen> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -118,6 +119,8 @@ class _ArticleDetailsScreenState extends State<ArticleDetailsScreen> {
       ),
     );
   }
+
+
 
   Widget _buildDetailView () {
     return SingleChildScrollView(
@@ -233,15 +236,15 @@ class _ArticleDetailsScreenState extends State<ArticleDetailsScreen> {
         final created = (res['article'] ?? res);
         final newArticle = Article.fromJson(created);
 
-        // setState(() {
-        //   _allArticles.insert(0, newArticle);
-        //   _filteredArticles; // keep current query applied
-        // });
+        setState(() {
+          _allArticles.insert(0, newArticle);
+          _filteredArticles; // keep current query applied
+        });
 
 
         if (ctx.mounted) Navigator.of(ctx).pop();
         if(mounted) {
-          Navigator.of(context).pop(); // hide dialog
+          Navigator.of(context).pop(newArticle); // return the article
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Article updated.')),
           );

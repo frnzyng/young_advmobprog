@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:young_advmobprog/models/article_model.dart';
 import 'package:young_advmobprog/screens/article_details_screen.dart';
 import 'package:young_advmobprog/services/article_service.dart';
+import 'package:young_advmobprog/widgets/article_form_dialog.dart';
 import 'package:young_advmobprog/widgets/custom_text.dart';
 
 class ArticleScreen extends StatefulWidget {
@@ -51,147 +52,28 @@ class _ArticleScreenState extends State<ArticleScreen> {
   }
 
   Future<void> _openAddArticleDialog() async {
-    final titleController = TextEditingController();
-    final authorController = TextEditingController();
-    final contentController = TextEditingController();
-    final formKey = GlobalKey<FormState>();
     bool isSaving = false;
-    bool isActive = true;
 
     await showDialog<void>(
       context: context,
       barrierDismissible: !isSaving,
       builder: (ctx) {
-        return StatefulBuilder(
-          builder: (ctx, setLocalState) {
-            List<String> _toList(String raw) {
-              return raw
-              .split(RegExp(r'[\n,]'))
-              .map((s) => s.trim())
-              .where((s) => s.isNotEmpty)
-              .toList();
-            }
-
-            Future<void> save() async {
-              if (isSaving) return;
-              if (!formKey.currentState!.validate()) return;
-              showLoadingDialog(context, 'Adding article...');
-
-              setLocalState(() {
-                isSaving = true;
-              } );
-              try {
-                final payLoad = {
-                  'title': titleController.text.trim(),
-                  'name': authorController.text.trim(),
-                  'content': _toList(contentController.text.trim()),
-                  'isActive': isActive,
-                };
-
-                final Map res = await ArticleService().createArticle(payLoad);
-
-                // Adjust depending on your API's response shape
+        return ArticleFormDialog(
+              title: "Add Article",
+              onSubmit: (payload) async {
+                final res = await ArticleService().createArticle(payload);
                 final created = (res['article'] ?? res);
                 final newArticle = Article.fromJson(created);
 
                 setState(() {
                   _allArticles.insert(0, newArticle);
-                  _filteredArticles; // keep current query applied
                 });
 
-                if (ctx.mounted) Navigator.of(ctx).pop();
-                if(mounted) {
-                  Navigator.of(context).pop(); // hide dialog
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Article added.')),
-                  );
-                }
-              } catch (e) {
-                setLocalState(() => isSaving = false);
-                  if (mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Failed to add: $e')),
-                    );
-                  }
-                }
-              } //
-                return AlertDialog(
-                  title: const Text('Add Article'),
-                  content: Form(
-                    key: formKey,
-                    child: SingleChildScrollView(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          TextFormField(
-                            controller: titleController,
-                            textInputAction: TextInputAction.next,
-                            decoration: const InputDecoration(
-                              labelText: 'Title',
-                              border: OutlineInputBorder(),
-                            ),
-                            validator: (v) =>
-                            (v == null || v.trim().isEmpty) ? 'Required' : null,
-                          ),
-                          SizedBox(height: 12.h,),
-                          TextFormField(
-                            controller: authorController,
-                            textInputAction: TextInputAction.next,
-                            decoration: const InputDecoration(
-                              labelText: 'Author / Name',
-                              border: OutlineInputBorder(),
-                            ),
-                            validator: (v) =>
-                            (v == null || v.trim().isEmpty) ? 'Required' : null,
-                          ),
-                          SizedBox(height: 12.h,),
-                          TextFormField(
-                            controller: contentController,
-                            minLines: 3,
-                            maxLines: 6,
-                            decoration: const InputDecoration(
-                              labelText: 'Content (one item per line or comma-separated)',
-                              border: OutlineInputBorder(),
-                              alignLabelWithHint: true,
-                            ),
-                            validator: (v) {
-                              final items = v == null
-                                ? []
-                                : v 
-                                    .trim()
-                                    .split(RegExp(r'[\n,]'))
-                                    .where((s) => s.trim().isNotEmpty)
-                                    .toList();
-                                return items.isEmpty
-                                  ? 'At least one content item'
-                                  : null;
-                            }
-                          ),
-                          SizedBox(height: 8.h,),
-                          SwitchListTile.adaptive(
-                            contentPadding: EdgeInsets.zero,
-                            title: const Text('Active'),
-                            value: isActive,
-                            onChanged: (val) => setLocalState(() => isActive = val),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  actions: [
-                    TextButton(
-                      onPressed: isSaving ? null : () => Navigator.of(ctx).pop(), 
-                      child: const Text('Cancel'),
-                    ),
-                    ElevatedButton.icon(
-                      icon: Icon(Icons.save), 
-                      onPressed: () {
-                        save();
-                      }, 
-                      label: Text('Save'),
-                    ),
-                  ],
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Article added.')),
                 );
+
+                return res;
               },
             );
           },
@@ -337,10 +219,23 @@ class _ArticleScreenState extends State<ArticleScreen> {
                       return Card(
                         elevation: 1,
                         child: InkWell(
-                          onTap: () {
+                          onTap: () async {
                             debugPrint('Tapped index $index: ${article.aid}');
-                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => ArticleDetailsScreen(article: article,) ),
-                          );
+                            final updated = await Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => ArticleDetailsScreen(article: article),
+                              ),
+                            );
+
+                            if (updated != null && updated is Article) {
+                              setState(() {
+                                final idx = _allArticles.indexWhere((a) => a.aid == updated.aid);
+                                if (idx != -1) {
+                                  _allArticles[idx] = updated;
+                                }
+                                _onSearchChanged();
+                              });
+                            }
                           },
                           child: Container(
                             padding: EdgeInsets.symmetric(
