@@ -6,8 +6,6 @@ import 'package:young_longexam_mobile/services/user_service.dart';
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
-  // This function now correctly calls getUserInfo and handles the result.
-  // It returns a User object instead of a Map, which is a better practice.
   Future<User> getUserData() async {
     UserService _userService = UserService();
     final User userData = await _userService.getUserInfo();
@@ -58,11 +56,11 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 Text(
-                  type.isNotEmpty
-                      ? "${type[0].toUpperCase()}${type.substring(1)}"
-                      : '',
-                  style:
-                      const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                  '$firstName $lastName',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600
+                  ),
                 ),
                 const SizedBox(height: 20),
                 Expanded(
@@ -70,10 +68,12 @@ class ProfileScreen extends StatelessWidget {
                     children: [
                       ListTile(
                         leading: const Icon(Icons.person),
-                        title: const Text('Full Name'),
+                        title: const Text('Type'),
                         subtitle: Text(
-                          '$firstName $lastName',
-                          style: TextStyle(fontSize: 16.sp),
+                          type.isNotEmpty
+                              ? "${type[0].toUpperCase()}${type.substring(1)}"
+                              : '',
+                          style: const TextStyle(fontSize: 16),
                         ),
                       ),
                       const Divider(),

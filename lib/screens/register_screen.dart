@@ -14,7 +14,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
   final _ageController = TextEditingController();
-  final _genderController = TextEditingController();
+  String? _selectedGender;
   final _contactNumberController = TextEditingController();
   final _emailController = TextEditingController();
   final _usernameController = TextEditingController();
@@ -43,7 +43,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           _firstNameController.text,
           _lastNameController.text,
           _ageController.text,
-          _genderController.text,
+          _selectedGender,
           _contactNumberController.text,
           _emailController.text,
           _usernameController.text,
@@ -150,31 +150,48 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     controller: _ageController,
                     decoration: InputDecoration(
                       labelText: 'Age',
-                      prefixIcon: const Icon(Icons.person),
+                      prefixIcon: const Icon(Icons.cake_outlined),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
+                    keyboardType: TextInputType.number, // Set keyboard to numbers
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your age';
+                      }
+                      // Validate that the input is a valid integer
+                      if (int.tryParse(value) == null) {
+                        return 'Please enter a valid age';
                       }
                       return null;
                     },
                   ),
                   const SizedBox(height: 16),
-                  TextFormField(
-                    controller: _genderController,
+                  DropdownButtonFormField<String>(
+                    value: _selectedGender,
                     decoration: InputDecoration(
                       labelText: 'Gender',
-                      prefixIcon: const Icon(Icons.person),
+                      prefixIcon: const Icon(Icons.wc),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
+                    items: ['Male', 'Female', 'Other']
+                        .map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _selectedGender = newValue;
+                      });
+                    },
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter your gender';
+                        return 'Please select your gender';
                       }
                       return null;
                     },
@@ -189,9 +206,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
+                    keyboardType: TextInputType.phone, // Use phone keyboard for better UX
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your contact number';
+                      }
+                      // Basic validation for numbers
+                      if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                        return 'Please enter a valid number';
                       }
                       return null;
                     },
@@ -303,6 +325,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                   ),
                   const SizedBox(height: 16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text('Already have an account? '),
+                      GestureDetector(
+                        onTap: () => Navigator.of(context).pop(),
+                        child: Text(
+                          'Login here',
+                          style: TextStyle(
+                            color: Colors.deepPurple,
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),

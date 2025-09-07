@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:young_longexam_mobile/services/user_service.dart';
-import 'package:young_longexam_mobile/widgets/custom_text.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -170,19 +169,23 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                   ),
                   const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () => Navigator.of(context).pushNamed('/register'), 
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text('Don\'t have an account yet? '),
+                      GestureDetector(
+                        onTap: () => Navigator.of(context).pushNamed('/register'),
+                        child: Text(
+                          'Register here',
+                          style: TextStyle(
+                            color: Colors.deepPurple,
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                       ),
-                    ),
-                    child: Text(
-                      'Register',
-                      style: TextStyle(fontSize: 16),
-                    )
-                  )
+                    ],
+                  ),
                 ],
               ),
             ),

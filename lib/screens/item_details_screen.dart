@@ -201,6 +201,11 @@ class _DetailScreenState extends State<DetailScreen> {
               });
             },
           ),
+          if (!_isActive && _isEditing)
+          IconButton(
+            icon: Icon(Icons.delete),
+            onPressed: () => _confirmDelete()
+          ),
         ],
       ),
       body: _isEditing ? _buildEditView() : _buildDetailView(),
@@ -314,11 +319,11 @@ class _DetailScreenState extends State<DetailScreen> {
                   SizedBox(
                 width: double.infinity,
                 child: OutlinedButton.icon(
-                  onPressed: _isSaving || _isActive
+                  onPressed: _isSaving
                       ? null
-                      : _confirmDelete,
-                  icon: const Icon(Icons.delete_outline),
-                  label: const Text('Delete Item'),
+                      : Navigator.of(context).pop,
+                  icon: const Icon(Icons.cancel),
+                  label: const Text('Cancel'),
                 ),
               ),
             ],
