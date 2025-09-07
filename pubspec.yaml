@@ -1,0 +1,28 @@
+name: young_longexam_mobile
+description: "A new Flutter project."
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: ^3.7.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_dotenv: ^6.0.0
+  flutter_screenutil: ^5.9.3
+  http: ^1.5.0
+  provider: ^6.1.5+1
+  shared_preferences: ^2.5.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/
+    - assets/images/NUCCITLogo_Black.png
+    - assets/images/NU_Black.png
