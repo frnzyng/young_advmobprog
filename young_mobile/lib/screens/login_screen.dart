@@ -67,6 +67,54 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  Future<void> _handleFirebaseLogin() async {
+    if (_formKey.currentState!.validate()) {
+      setState(() {
+        _isLoading = true;
+      });
+
+      try {
+        final response = await _userService.signIn(
+          email: _emailController.text,
+          password: _passwordController.text,
+        );
+
+        // Save user data to SharedPreferences
+        Map<String, dynamic> userData = {
+          'username': response.user?.displayName,
+          'email': response.user?.email,
+          'token': response.user?.getIdToken().toString(),
+          'type': 'firebase',
+        };
+        await _userService.saveUserData(userData);
+
+        if (!mounted) return;
+
+        // Show success message
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Login successful!')),
+        );
+
+        // Navigate to home screen
+        Navigator.pushReplacementNamed(context, '/home');
+      } catch (e) {
+        if (!mounted) return;
+
+        // Show error message
+        print(e.toString());
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Login failed: ${e.toString()}')),
+        );
+      } finally {
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -170,6 +218,28 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 16),
                   ElevatedButton(
+                    onPressed: _isLoading ? null : _handleFirebaseLogin,
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: _isLoading
+                        ? const SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                            ),
+                          )
+                        : const Text(
+                            'Firebase Log In',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
                     onPressed: () => Navigator.of(context).pushNamed('/register'), 
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 16),
@@ -179,6 +249,20 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     child: Text(
                       'Register',
+                      style: TextStyle(fontSize: 16),
+                    )
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () => Navigator.of(context).pushNamed('/firebaseRegister'), 
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: Text(
+                      'Firebase Register',
                       style: TextStyle(fontSize: 16),
                     )
                   )

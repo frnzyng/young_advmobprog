@@ -33,7 +33,7 @@ const updateUser = async (req, res) => {
             req.body.password = await bcrypt.hash(req.body.password, 10);
         }
 
-        const user = await User.findBdyIdAndUpdate(req.params.id, req.body, {new: true });
+        const user = await User.findByIdAndUpdate(req.params.id, req.body, {new: true });
 
         res.json(user);
     } catch (error) {
@@ -43,7 +43,11 @@ const updateUser = async (req, res) => {
 
 const deleteUser = async (req, res) => {
     try {
-        await User.findByIdAndDelete(req.params.id);
+        const user = await User.findById(req.params.id);
+
+        user.isActive = false;
+        await user.save();
+
         res.json({ message: 'User deleted successfully' });
     } catch (error) {
         res.status(400).json({ message: error.message });
@@ -81,10 +85,16 @@ const loginUser = async (req, res) => {
         res.json({ 
             message: 'Login successful', 
             token, 
-            type: user.type, 
+            id: user._id,
             firstName: user.firstName, 
             lastName: user.lastName ,
+            age: user.age,
+            gender: user.gender,
+            contactNumber: user.contactNumber,
             email: user.email,
+            username: user.username,
+            address: user.address,
+            type: user.type, 
         })
     } catch (error) {
         console.log('Error: ' + error);

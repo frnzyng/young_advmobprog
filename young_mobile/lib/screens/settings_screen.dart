@@ -8,10 +8,15 @@ import 'package:young_advmobprog/widgets/custom_text.dart';
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
-  void logout(BuildContext context) {
+  void logout(BuildContext context) async {
     UserService userService = UserService();
-    
-    userService.logout();
+    final userData = await userService.getUserData();
+
+    if(userData['type'] == 'firebase') {
+      userService.signOut();
+    } else {
+      userService.logout();
+    }
     Navigator.of(context).popAndPushNamed('/login');
   }
 
@@ -46,7 +51,36 @@ class SettingsScreen extends StatelessWidget {
                 ),
               ],
             ),
-
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                CustomText(
+                  text: "Change Username",
+                  fontSize: 16.sp,
+                ),
+                IconButton(onPressed: () => Navigator.of(context).pushNamed('/changeUsername'), icon: Icon(Icons.arrow_forward_ios_rounded))
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                CustomText(
+                  text: "Change Password",
+                  fontSize: 16.sp,
+                ),
+                IconButton(onPressed: () => Navigator.of(context).pushNamed('/changePassword'), icon: Icon(Icons.arrow_forward_ios_rounded))
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                CustomText(
+                  text: "Delete Account",
+                  fontSize: 16.sp,
+                ),
+                IconButton(onPressed: () => Navigator.of(context).pushNamed('/deleteAccount'), icon: Icon(Icons.arrow_forward_ios_rounded))
+              ],
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -54,7 +88,7 @@ class SettingsScreen extends StatelessWidget {
                   text: "Logout",
                   fontSize: 16.sp,
                 ),
-                IconButton(onPressed: () => logout(context), icon: Icon(Icons.logout))
+                IconButton(onPressed: () => logout(context), icon: Icon(Icons.logout, color: Colors.red,))
               ],
             ),
           ],

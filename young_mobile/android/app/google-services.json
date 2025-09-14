@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "794415714942",
+    "project_id": "advmobprog-firebase-720eb",
+    "storage_bucket": "advmobprog-firebase-720eb.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:794415714942:android:e7bcf818ca94089f20be2f",
+        "android_client_info": {
+          "package_name": "com.example.young_advmobprog"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-XZ4vDuD6M_k0ADe2STr4-Be23QLIj0I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

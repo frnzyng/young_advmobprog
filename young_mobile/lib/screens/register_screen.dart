@@ -80,6 +80,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       }
     }
   }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -301,7 +302,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             style: TextStyle(fontSize: 16),
                           ),
                   ),
-                  const SizedBox(height: 16),
                 ],
               ),
             ),

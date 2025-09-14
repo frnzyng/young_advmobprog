@@ -9,6 +9,8 @@ router.route('/:id').put(updateUser).delete(deleteUser);
 
 router.post('/login', loginUser);
 
+router.post('/delete/:id', deleteUser);
+
 router.post('/register', registerUser);
 
 module.exports = router;
