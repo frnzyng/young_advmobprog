@@ -80,13 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
         );
 
         // Save user data to SharedPreferences
-        Map<String, dynamic> userData = {
-          'username': response.user?.displayName,
-          'email': response.user?.email,
-          'token': response.user?.getIdToken().toString(),
-          'type': 'firebase',
-        };
-        await _userService.saveUserData(userData);
+        await _userService.saveUserData(response);
 
         if (!mounted) return;
 

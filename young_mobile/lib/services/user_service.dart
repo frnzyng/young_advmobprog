@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -53,6 +54,7 @@ class UserService {
   //**Save User Data to SharedPreferences**
   Future<void> saveUserData(Map<String, dynamic> userData) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('uid', userData['uid'] ?? '');
     await prefs.setString('id', userData['id'] ?? '');
     await prefs.setString('username', userData['username'] ?? '');
     await prefs.setString('firstName', userData['firstName'] ?? '');
@@ -70,6 +72,7 @@ class UserService {
   Future<Map<String, dynamic>> getUserData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return {
+      'uid': prefs.getString('uid') ?? '',
       'id': prefs.getString('id') ?? '',
       'username': prefs.getString('username') ?? '',
       'firstName': prefs.getString('firstName') ?? '',
@@ -96,7 +99,7 @@ class UserService {
     await prefs.clear();
   }
 
-    Future<Map<String, dynamic>> updateUser(Map<String, dynamic> userData) async {
+  Future<Map<String, dynamic>> updateUser(Map<String, dynamic> userData) async {
     final userId = await userData['id'];
 
     final payload = _cleanseData(userData);
@@ -127,25 +130,104 @@ class UserService {
 
 
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   User? get currentUser => firebaseAuth.currentUser;
 
   Stream<User?> get authStateChanges => firebaseAuth.authStateChanges();
-  Future<UserCredential> signIn({
+
+
+  Future<Map<String, dynamic>> signIn({
     required String email,
     required String password,
   }) async {
-    return await firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
+    try {
+      // 1. SIGN IN USER WITH FIREBASE AUTH
+      UserCredential userCredential = await firebaseAuth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      // Get the authenticated user
+      User? user = userCredential.user;
+      if (user == null) {
+        throw Exception('Authentication successful, but user object is null.');
+      }
+
+      // 2. FETCH ADDITIONAL USER DATA FROM FIRESTORE
+      DocumentSnapshot<Map<String, dynamic>> userDoc = await firestore
+          .collection('Users')
+          .doc(user.uid) // Use the User's UID as the document ID
+          .get();
+
+      if (!userDoc.exists) {
+        // This is a potential issue if registration failed to write to Firestore
+        throw Exception('User data not found in Firestore.');
+      }
+
+      // 3. RETURN THE FIRESTORE DATA
+      // We return the map of user data instead of the UserCredential
+      return userDoc.data()!;
+
+    } on FirebaseAuthException catch (e) {
+      // Re-throw specific Firebase Auth errors for UI handling
+      throw Exception(e.code == 'user-not-found'
+          ? 'No user found for that email.'
+          : e.code == 'wrong-password'
+              ? 'Wrong password provided.'
+              : e.message ?? 'An unknown authentication error occurred.');
+    } catch (e) {
+      // Handle any other errors (e.g., network issues, Firestore read errors)
+      throw Exception('Sign-in failed: $e');
+    }
   }
 
+
   Future<UserCredential> createAccount({
+    required String firstName,
+    required String lastName,
+    required String age,
+    required String gender,
+    required String contactNumber,
     required String email,
+    required String username,
     required String password,
+    required String address,
   }) async {
-    return await firebaseAuth.createUserWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
+    try {
+      // 1. CREATE USER IN FIREBASE AUTH
+      UserCredential userCredential = await firebaseAuth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      // Get the newly created user's UID
+      String uid = userCredential.user!.uid;
+
+      // 2. SAVE ADDITIONAL USER DETAILS TO FIRESTORE
+      await firestore.collection('Users').doc(uid).set({
+        'uid': uid, // Store the UID in the document for easy querying
+        'firstName': firstName,
+        'lastName': lastName,
+        'age': age,
+        'gender': gender,
+        'contactNumber': contactNumber,
+        'email': email,
+        'username': username,
+        'address': address,
+        'type': 'editor'
+      });
+
+      // 3. RETURN THE USER CREDENTIAL
+      return userCredential;
+
+    } on FirebaseAuthException catch (e) {
+      // Handle specific Firebase Auth errors (e.g., email already in use)
+      throw Exception('Firebase Auth Error: ${e.message}');
+    } catch (e) {
+      // Handle other potential errors (e.g., Firestore write error)
+      throw Exception('Registration failed: $e');
+    }
   }
 
   Future<void> signOut() async {

@@ -39,8 +39,8 @@ com.example.young_advmobprog.app-jetified-startup-runtime-1.1.1-37 C:\Users\fran
 com.example.young_advmobprog.app-jetified-activity-1.8.1-38 C:\Users\franz\.gradle\caches\8.10.2\transforms\ca60be589f3017176b432e04a4295053\transformed\jetified-activity-1.8.1\res
 com.example.young_advmobprog.app-jetified-play-services-basement-18.4.0-39 C:\Users\franz\.gradle\caches\8.10.2\transforms\cf636ef2f0738047fe8129f320ef339e\transformed\jetified-play-services-basement-18.4.0\res
 com.example.young_advmobprog.app-jetified-core-common-2.0.3-40 C:\Users\franz\.gradle\caches\8.10.2\transforms\dc78addb618cc9a88505262f8a23e42d\transformed\jetified-core-common-2.0.3\res
-com.example.young_advmobprog.app-jetified-lifecycle-runtime-ktx-2.7.0-41 C:\Users\franz\.gradle\caches\8.10.2\transforms\ee40907df6635dadbd2abe5161721138\transformed\jetified-lifecycle-runtime-ktx-2.7.0\res
-com.example.young_advmobprog.app-jetified-play-services-base-18.0.1-42 C:\Users\franz\.gradle\caches\8.10.2\transforms\ee6aa5fd7f2304b1bbe5c05f658d5472\transformed\jetified-play-services-base-18.0.1\res
+com.example.young_advmobprog.app-jetified-play-services-base-18.1.0-41 C:\Users\franz\.gradle\caches\8.10.2\transforms\eb80b7c20f86db896fc82173afcd18d6\transformed\jetified-play-services-base-18.1.0\res
+com.example.young_advmobprog.app-jetified-lifecycle-runtime-ktx-2.7.0-42 C:\Users\franz\.gradle\caches\8.10.2\transforms\ee40907df6635dadbd2abe5161721138\transformed\jetified-lifecycle-runtime-ktx-2.7.0\res
 com.example.young_advmobprog.app-debug-43 C:\Users\franz\Documents\Visual Studio Code Projects\young_advmobprog\young_mobile\android\app\src\debug\res
 com.example.young_advmobprog.app-main-44 C:\Users\franz\Documents\Visual Studio Code Projects\young_advmobprog\young_mobile\android\app\src\main\res
 com.example.young_advmobprog.app-google-services-45 C:\Users\franz\Documents\Visual Studio Code Projects\young_advmobprog\young_mobile\build\app\generated\res\google-services\debug
@@ -49,6 +49,7 @@ com.example.young_advmobprog.app-resValues-47 C:\Users\franz\Documents\Visual St
 com.example.young_advmobprog.app-packageDebugResources-48 C:\Users\franz\Documents\Visual Studio Code Projects\young_advmobprog\young_mobile\build\app\intermediates\incremental\debug\packageDebugResources\merged.dir
 com.example.young_advmobprog.app-packageDebugResources-49 C:\Users\franz\Documents\Visual Studio Code Projects\young_advmobprog\young_mobile\build\app\intermediates\incremental\debug\packageDebugResources\stripped.dir
 com.example.young_advmobprog.app-debug-50 C:\Users\franz\Documents\Visual Studio Code Projects\young_advmobprog\young_mobile\build\app\intermediates\merged_res\debug\mergeDebugResources
-com.example.young_advmobprog.app-debug-51 C:\Users\franz\Documents\Visual Studio Code Projects\young_advmobprog\young_mobile\build\firebase_auth\intermediates\packaged_res\debug\packageDebugResources
-com.example.young_advmobprog.app-debug-52 C:\Users\franz\Documents\Visual Studio Code Projects\young_advmobprog\young_mobile\build\firebase_core\intermediates\packaged_res\debug\packageDebugResources
-com.example.young_advmobprog.app-debug-53 C:\Users\franz\Documents\Visual Studio Code Projects\young_advmobprog\young_mobile\build\shared_preferences_android\intermediates\packaged_res\debug\packageDebugResources
+com.example.young_advmobprog.app-debug-51 C:\Users\franz\Documents\Visual Studio Code Projects\young_advmobprog\young_mobile\build\cloud_firestore\intermediates\packaged_res\debug\packageDebugResources
+com.example.young_advmobprog.app-debug-52 C:\Users\franz\Documents\Visual Studio Code Projects\young_advmobprog\young_mobile\build\firebase_auth\intermediates\packaged_res\debug\packageDebugResources
+com.example.young_advmobprog.app-debug-53 C:\Users\franz\Documents\Visual Studio Code Projects\young_advmobprog\young_mobile\build\firebase_core\intermediates\packaged_res\debug\packageDebugResources
+com.example.young_advmobprog.app-debug-54 C:\Users\franz\Documents\Visual Studio Code Projects\young_advmobprog\young_mobile\build\shared_preferences_android\intermediates\packaged_res\debug\packageDebugResources

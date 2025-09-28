@@ -31,9 +31,6 @@ class ProfileScreen extends StatelessWidget {
           }
 
           final userData = snapshot.data!;
-          if (userData['type'] == 'firebase') {
-            return buildFirebaseProfile(userData);
-          }
           return buildProfile(userData);
         },
       ),

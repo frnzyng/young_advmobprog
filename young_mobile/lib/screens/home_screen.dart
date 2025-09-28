@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:young_advmobprog/screens/article_screen.dart';
+import 'package:young_advmobprog/screens/chat_screen.dart';
 import 'package:young_advmobprog/screens/profile_screen.dart';
 import 'package:young_advmobprog/screens/settings_screen.dart';
 import 'package:young_advmobprog/widgets/custom_text.dart';
@@ -19,7 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final List<String> _titles = [
     'Articles',
-    'Notifications',
+    'Chat',
     'Profile',
   ];
 
@@ -49,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
         controller: _pageController,
         children: const <Widget>[
           ArticleScreen(),
-          Placeholder(),
+          ChatScreen(),
           ProfileScreen(),
         ],
         onPageChanged: (page) {
@@ -64,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
         onTap: _onTappedBar,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.notifications), label: 'Notification'),
+          BottomNavigationBarItem(icon: Icon(Icons.chat), label: 'Chat'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
         currentIndex: _selectedIndex,

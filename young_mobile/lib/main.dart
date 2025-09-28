@@ -8,6 +8,7 @@ import 'package:young_advmobprog/firebase_options.dart';
 import 'package:young_advmobprog/providers/theme_provider.dart';
 import 'package:young_advmobprog/screens/change_password_screen.dart';
 import 'package:young_advmobprog/screens/change_username_screen.dart';
+import 'package:young_advmobprog/screens/chat_screen.dart';
 import 'package:young_advmobprog/screens/delete_account_screen.dart';
 import 'package:young_advmobprog/screens/firebase_register_screen.dart';
 import 'package:young_advmobprog/screens/home_screen.dart';
@@ -54,6 +55,7 @@ class MainApp extends StatelessWidget {
               '/register': (context) => const RegisterScreen(),
               '/firebaseRegister': (context) => const FirebaseRegisterScreen(),
               '/home': (context) => const HomeScreen(),
+              '/chats': (context) => const ChatScreen(),
               '/profile': (context) => const ProfileScreen(),
               '/changeUsername': (context) => const ChangeUsernameScreen(),
               '/changePassword': (context) => const ChangePasswordScreen(),

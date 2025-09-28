@@ -152,7 +152,7 @@ class _ArticleScreenState extends State<ArticleScreen> {
                   hintText: "Search articles...",
                   hintStyle: TextStyle(fontSize: 14.sp, color: Colors.grey),
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30.r),
+                    borderRadius: BorderRadius.circular(10.r),
                   ),
                 ),
               ),
